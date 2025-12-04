@@ -7,7 +7,7 @@ const ItemListContainer = () => {
   const { category } = useParams();
 
   useEffect(() => {
-    // Simulamos una llamada asíncrona
+    
     const getProducts = new Promise((resolve) => {
       setTimeout(() => {
         const productsData = [
@@ -21,6 +21,10 @@ const ItemListContainer = () => {
           { id: 8, title: "Traje Incendio Forestal", price: 200000, description: "Forestal Inforest", image: "/images/forestal.png", category: "ropa" },
           { id: 9, title: "Traje Incendio Forestal", price: 250000, description: "Forestal Rosembauer", image: "/images/forestal1.png", category: "ropa" },
           { id: 10, title: "Traje Incendio Forestal", price: 80000, description: "Overol Forestal", image: "/images/mamelucoforestal.png", category: "ropa" },
+          { id: 11, title: "Guantes de Incendio", price: 30000, description: "Guantes Rosenbauer", image: "/images/Guantes.jpg", category: "guantes" },
+          { id: 12, title: "Guantes de Incendio", price: 40000, description: "Guantes Rosenbauer A10", image: "/images/guantesestructurales.png", category: "guantes" },
+          { id: 13, title: "Guantes de Incendio Forestal", price: 20000, description: "Guantes Forestales", image: "/images/guantesforetales.png", category: "guantes" },
+          { id: 14, title: "Guantes de Incendio Forestal", price: 20000, description: "Guantes Forestales", image: "/images/guantesforetales1.png", category: "guantes" },
         ];
         
         if (category) {
