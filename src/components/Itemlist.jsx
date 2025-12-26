@@ -1,45 +1,39 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-const ItemList = ({ products }) => {
+const ItemList = ({ productos }) => {
+  console.log("🛒 ItemList recibió productos:", productos);
+  console.log("📊 Tipo de productos:", typeof productos);
+  console.log("📊 Es array?", Array.isArray(productos));
+  
+  // Verificación segura ANTES de usar .map()
+  if (!productos || !Array.isArray(productos) || productos.length === 0) {
+    console.log("⚠️ No hay productos para mostrar");
+    return (
+      <div className="text-center py-5">
+        <p className="text-muted">No hay productos disponibles</p>
+        <p className="text-muted small">
+          {!productos ? "productos es null/undefined" : 
+           !Array.isArray(productos) ? "productos no es un array" : 
+           "El array está vacío"}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="row">
-      {products.map(product => (
-        <div key={product.id} className="col-md-4 mb-4">
-          <div className="card h-100 shadow-sm">
-            {}
-            <div className="image-container" style={{ 
-              height: "250px", 
-              overflow: "hidden",
-              backgroundColor: "rgba(248, 249, 250, 1)"
-            }}>
-              <img 
-                src={product.image || "https://via.placeholder.com/300x250"} 
-                className="card-img-top"
-                alt={product.title}
-                style={{ 
-                  maxWidth: "100%",
-                  maxHeight: "100%",
-                  objectFit: "contain",
-                  width: "auto",
-                  height: "auto",
-                  display: "block"
-                }}
-                onError={(e) => {
-                  e.target.src = "https://via.placeholder.com/300x250/6c757d/ffffff?text=Sin+imagen";
-                }}
-              />
-            </div>
-            
-            <div className="card-body d-flex flex-column">
-              <h5 className="card-title">{product.title}</h5>
-              <p className="card-text text-muted">{product.description}</p>
-              <p className="card-text fw-bold fs-4 text-primary">${product.price}</p>
-              <div className="mt-auto">
-                <Link to={`/item/${product.id}`} className="btn btn-primary w-100">
-                  Ver detalle
-                </Link>
-              </div>
+      {productos.map((producto) => (
+        <div className="col-md-4 mb-4" key={producto.id}>
+          {/* Tu código de cada producto aquí */}
+          <div className="card">
+            <img 
+              src={producto.imagen} 
+              className="card-img-top" 
+              alt={producto.titulo}
+            />
+            <div className="card-body">
+              <h5 className="card-title">{producto.titulo}</h5>
+              <p className="card-text">${producto.precio.toLocaleString()}</p>
             </div>
           </div>
         </div>
