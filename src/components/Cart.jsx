@@ -1,21 +1,40 @@
+// src/components/Cart.jsx - VERSIÓN QUE SÍ FUNCIONA
 import React from 'react';
-import { useCart } from '../context/CartContext';
 import { Link } from 'react-router-dom';
+import { useCart } from '../context/useCart';
 import CartItem from './CartItem';
 
 const Cart = () => {
-  const { cart, vaciarCarrito, precioTotal, cantidadTotal } = useCart();
-
-  if (cart.length === 0) {
+  // OBTENER EL CARRITO CORRECTAMENTE
+  const { carrito, total, vaciarCarrito } = useCart();
+  
+  // DEBUG: Ver qué tenemos
+  console.log('Cart - carrito:', carrito);
+  console.log('Cart - total:', total);
+  console.log('Cart - carrito.length:', carrito ? carrito.length : 'undefined');
+  
+  // Si carrito es undefined o null, mostrar error
+  if (!carrito) {
     return (
-      <div className="container mt-5">
-        <div className="card shadow">
-          <div className="card-body text-center py-5">
-            <h2 className="card-title mb-4">🛒 Tu carrito está vacío</h2>
-            <p className="card-text text-muted mb-4">
-              No hay productos en tu carrito de compras.
-            </p>
-            <Link to="/" className="btn btn-primary btn-lg">
+      <div className="container text-center py-5">
+        <div className="alert alert-danger">
+          <h4>Error en el carrito</h4>
+          <p>No se pudo cargar el carrito. Intenta recargar la página.</p>
+          <Link to="/" className="btn btn-primary">Volver al inicio</Link>
+        </div>
+      </div>
+    );
+  }
+  
+  // Si el carrito está vacío (es un array vacío)
+  if (carrito.length === 0) {
+    return (
+      <div className="container text-center py-5">
+        <div className="card shadow-sm border-0" style={{ maxWidth: '500px', margin: '0 auto' }}>
+          <div className="card-body py-5">
+            <h2 className="text-muted mb-4">🛒 Tu carrito está vacío</h2>
+            <p className="text-muted mb-4">Agrega algunos productos para verlos aquí</p>
+            <Link to="/products" className="btn btn-danger btn-lg">
               Ver productos
             </Link>
           </div>
@@ -23,80 +42,63 @@ const Cart = () => {
       </div>
     );
   }
+  
+  // Calcular total si no viene calculado
+  const totalCalculado = total !== undefined ? total : 
+    carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
 
   return (
-    <div className="container mt-4">
-      <h1 className="mb-4">🛒 Carrito de Compras</h1>
+    <div className="container py-4">
+      <h1 className="mb-4">Tu Carrito</h1>
       
-      <div className="row">
-        <div className="col-md-8">
-          <div className="card shadow mb-4">
-            <div className="card-body">
-              <h3 className="card-title mb-4">Productos ({cantidadTotal})</h3>
-              
-              {cart.map((item) => (
-                <CartItem key={item.id} item={item} />
-              ))}
-              
-              <div className="mt-4">
-                <button 
-                  className="btn btn-outline-danger"
-                  onClick={vaciarCarrito}
-                >
-                  Vaciar carrito
-                </button>
-                <Link to="/" className="btn btn-outline-primary ms-2">
-                  Seguir comprando
-                </Link>
-              </div>
+      {/* Lista de productos */}
+      <div className="card shadow-sm mb-4">
+        <div className="card-body">
+          {carrito.map((item, index) => (
+            <CartItem 
+              key={item.id || index} 
+              item={item} 
+            />
+          ))}
+        </div>
+      </div>
+      
+      {/* Resumen */}
+      <div className="card shadow-sm">
+        <div className="card-body">
+          <div className="row">
+            <div className="col-md-6">
+              <h4>Resumen de compra</h4>
+              <p>Productos: {carrito.length}</p>
+              <p>Total items: {carrito.reduce((sum, item) => sum + item.cantidad, 0)}</p>
+            </div>
+            <div className="col-md-6 text-end">
+              <h3 className="text-danger">Total: ${totalCalculado.toLocaleString()}</h3>
             </div>
           </div>
-        </div>
-        
-        <div className="col-md-4">
-          <div className="card shadow">
-            <div className="card-body">
-              <h3 className="card-title mb-4">Resumen de compra</h3>
-              
-              <div className="mb-3">
-                <p className="d-flex justify-content-between">
-                  <span>Productos ({cantidadTotal}):</span>
-                  <span>${precioTotal.toLocaleString()}</span>
-                </p>
-                <p className="d-flex justify-content-between">
-                  <span>Envío:</span>
-                  <span className="text-success">Gratis</span>
-                </p>
-                <hr />
-                <p className="d-flex justify-content-between fs-5 fw-bold">
-                  <span>Total:</span>
-                  <span>${precioTotal.toLocaleString()}</span>
-                </p>
-              </div>
-              
-              <div className="d-grid gap-2">
-                <Link to="/checkout" className="btn btn-success btn-lg">
-                  Finalizar compra
-                </Link>
-                <button 
-                  className="btn btn-outline-danger"
-                  onClick={vaciarCarrito}
-                >
-                  Vaciar carrito
-                </button>
-              </div>
-              
-              <div className="mt-4">
-                <p className="text-muted small">
-                  <i className="bi bi-shield-check me-1"></i>
-                  Compra 100% segura
-                </p>
-                <p className="text-muted small">
-                  <i className="bi bi-truck me-1"></i>
-                  Envío a todo el país
-                </p>
-              </div>
-            </div>
+          
+          {/* Acciones */}
+          <div className="d-flex gap-3 mt-4">
+            <button 
+              onClick={vaciarCarrito}
+              className="btn btn-outline-danger"
+            >
+              Vaciar carrito
+            </button>
+            
+            <Link 
+              to="/products" 
+              className="btn btn-outline-primary"
+            >
+              Seguir comprando
+            </Link>
+            
+            <Link 
+              to="/checkout" 
+              className="btn btn-danger ms-auto"
+            >
+              Finalizar compra
+            </Link>
           </div>
         </div>
       </div>

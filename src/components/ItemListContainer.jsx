@@ -1,71 +1,111 @@
+// src/components/ItemListContainer.jsx - VERSIÓN SIN ERROR
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import ItemList from './ItemList';
-import { obtenerProductos } from '../services/productosService';
+import { obtenerProductos, obtenerProductosPorCategoria } from '../services/productosService';
 
-const ItemListContainer = () => {
+const ItemListContainer = ({ greeting }) => {
+  // OBTENER PARÁMETROS CORRECTAMENTE - SOLO UNA VEZ AL PRINCIPIO
+  const { id } = useParams();
+  
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null);
 
-  console.log("🔄 ItemListContainer montado");
+  // DEBUG: Ver parámetros recibidos
+  console.log('DEBUG - Componente ItemListContainer montado');
+  console.log('DEBUG - Parámetro id recibido:', id);
+  console.log('DEBUG - Parámetro greeting:', greeting);
 
   useEffect(() => {
-    const fetchProductos = async () => {
-      setLoading(true);
-      setError(false);
-      
-      try {
-        console.log("📡 Llamando a obtenerProductos...");
-        const data = await obtenerProductos();
-        console.log("📦 Productos obtenidos:", data);
+    console.log('DEBUG - useEffect ejecutándose con id:', id);
+    
+    setLoading(true);
+    setError(null);
+    
+    // Validar categoría
+    if (id) {
+      console.log('DEBUG - Filtrando por categoría:', id);
+    } else {
+      console.log('DEBUG - Mostrando todos los productos');
+    }
+    
+    const fetchProductos = id 
+      ? obtenerProductosPorCategoria(id)
+      : obtenerProductos();
+    
+    fetchProductos
+      .then((data) => {
+        console.log('DEBUG - Productos recibidos:', data.length, 'productos');
+        console.log('DEBUG - Primer producto:', data[0]);
         
-        // Asegúrate de que sea un array
-        if (data && Array.isArray(data)) {
-          setProductos(data);
-        } else {
-          console.error("❌ Datos no son un array:", data);
-          setProductos([]);
-        }
-      } catch (err) {
-        console.error("💥 Error al cargar productos:", err);
-        setError(true);
-        setProductos([]);
-      } finally {
+        setProductos(data);
         setLoading(false);
-      }
-    };
+      })
+      .catch((error) => {
+        console.error('ERROR - Al obtener productos:', error);
+        setError('Error al cargar los productos');
+        setLoading(false);
+      });
+  }, [id]);
 
-    fetchProductos();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="container text-center py-5">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Cargando...</span>
-        </div>
-        <p className="mt-3">Cargando productos...</p>
-      </div>
-    );
-  }
-
+  // Renderizado
   if (error) {
     return (
-      <div className="container text-center py-5">
+      <div className="container text-center mt-5">
         <div className="alert alert-danger">
-          <h4>Error al cargar productos</h4>
-          <p>No se pudieron cargar los productos. Intenta de nuevo más tarde.</p>
+          <h4>Error</h4>
+          <p>{error}</p>
+          <a href="/" className="btn btn-primary">Volver al inicio</a>
         </div>
       </div>
     );
   }
-
-  console.log("📤 Enviando productos a ItemList:", productos);
 
   return (
     <div className="container mt-4">
-      <h1>Catálogo de Productos</h1>
-      <ItemList productos={productos} />
+      {/* Título */}
+      <h1 className="mb-4">
+        {id 
+          ? `Categoría: ${id.charAt(0).toUpperCase() + id.slice(1)}`
+          : (greeting || 'Todos los productos')
+        }
+      </h1>
+      
+      {/* Loading */}
+      {loading && (
+        <div className="text-center py-5">
+          <div className="spinner-border text-danger" style={{width: '3rem', height: '3rem'}}>
+            <span className="visually-hidden">Cargando...</span>
+          </div>
+          <p className="mt-3">Cargando productos...</p>
+        </div>
+      )}
+      
+      {/* Sin productos */}
+      {!loading && productos.length === 0 && (
+        <div className="text-center py-5">
+          <h3>No se encontraron productos</h3>
+          <p className="text-muted">
+            {id 
+              ? `No hay productos en la categoría "${id}"`
+              : 'No hay productos disponibles'
+            }
+          </p>
+          <a href="/products" className="btn btn-primary">Ver todos los productos</a>
+        </div>
+      )}
+      
+      {/* Lista de productos */}
+      {!loading && productos.length > 0 && (
+        <div>
+          <p className="text-muted mb-4">
+            Mostrando {productos.length} producto{productos.length !== 1 ? 's' : ''}
+            {id && ` en la categoría "${id}"`}
+          </p>
+          <ItemList productos={productos} />
+        </div>
+      )}
     </div>
   );
 };

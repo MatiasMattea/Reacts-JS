@@ -1,4 +1,4 @@
-import { useCart } from '../context/CartContext'; // ← AGREGAR
+import { useCart } from '../context/useCart';
 import { Link } from 'react-router-dom'; // ← AGREGAR
 
 const CartWidget = () => {

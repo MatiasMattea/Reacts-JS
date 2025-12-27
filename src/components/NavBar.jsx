@@ -1,26 +1,47 @@
-import CartWidget from './CartWidget';
-import { Link } from 'react-router-dom';
+// src/components/NavBar.jsx - COPIA Y PEGA
+import React from 'react';
+import { Link } from 'react-router-dom';  // ← IMPORTA Link
+import { useCart } from '../context/useCart';
 
-const NavBar = () => {
+function NavBar() {
+  const { totalUnidades } = useCart();
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="navbar">
       <div className="container">
-        <Link className="navbar-brand" to="/">
-          🛍️ Mi Tienda
+        {/* Logo - Link a home */}
+        <Link to="/" className="navbar-brand">
+          🚒 Equipo Bomberos
         </Link>
         
-        <div className="navbar-nav me-auto">
-          <Link className="nav-link" to="/">Inicio</Link>
-          <Link className="nav-link" to="/category/cascos">Cascos</Link>
-          <Link className="nav-link" to="/category/ropa">Ropa</Link>
-          <Link className="nav-link" to="/category/guantes">Guantes</Link>
-          <Link className="nav-link" to="/category">Todas las categorías</Link>
+        {/* Navegación - TODOS Links, NO <a> */}
+        <div className="nav-links">
+          <Link to="/" className="nav-link">Inicio</Link>
+          <Link to="/category/cascos" className="nav-link">Cascos</Link>
+          <Link to="/category/ropa" className="nav-link">Ropa</Link>
+          <Link to="/category/guantes" className="nav-link">Guantes</Link>
+          <Link to="/products" className="nav-link">Todos</Link>
         </div>
         
-        <CartWidget />
+        {/* Carrito - Link */}
+        <Link to="/cart" className="nav-link">
+          🛒 Carrito
+          {totalUnidades > 0 && (
+            <span style={{
+              backgroundColor: 'white',
+              color: '#d32f2f',
+              borderRadius: '50%',
+              padding: '2px 6px',
+              fontSize: '12px',
+              marginLeft: '5px'
+            }}>
+              {totalUnidades}
+            </span>
+          )}
+        </Link>
       </div>
     </nav>
   );
-};
+}
 
 export default NavBar;

@@ -1,249 +1,222 @@
-/* ESTILOS PERSONALIZADOS - ITEM DETAIL */
+/* src/App.css - COPIA TODO ESTO */
 
-.contenedor-detalle {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-}
-
-.fila {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3rem;
-}
-
-.columna-imagen {
-  flex: 1;
-  min-width: 300px;
-}
-
-.columna-informacion {
-  flex: 1;
-  min-width: 300px;
-}
-
-.contenedor-imagen-producto {
-  background: rgb(248, 249, 250); 
-  border-radius: 12px;
-  padding: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 400px;
-  border: 2px solid rgb(233, 236, 239); 
-}
-
-.imagen-producto-detalle {
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: contain;
-}
-
-.imagen-placeholder {
-  opacity: 0.7;
-}
-
-.titulo-producto {
-  font-size: 2.2rem;
-  color: rgb(33, 37, 41); 
-  margin-bottom: 0.5rem;
-  font-weight: 700;
-}
-
-.etiqueta-categoria {
-  display: inline-block;
-  background: rgb(108, 117, 125); 
-  color: rgb(255, 255, 255);
-  padding: 0.4rem 1rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  margin-bottom: 1.5rem;
-}
-
-.subtitulo-seccion {
-  font-size: 1.2rem;
-  color: rgb(73, 80, 87);
-  margin-bottom: 0.8rem;
-  font-weight: 600;
-}
-
-.seccion-descripcion {
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgb(222, 226, 230);
-}
-
-.texto-descripcion {
-  color: rgb(108, 117, 125);
-  font-size: 1.1rem;
-  line-height: 1.6;
-}
-
-.seccion-precio {
-  margin-bottom: 2rem;
-}
-
-.precio-producto {
-  font-size: 2.5rem;
-  color: rgb(13, 110, 253);
-  font-weight: 700;
-}
-
-.seccion-cantidad {
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgb(222, 226, 230);
-}
-
-.texto-cantidad-seleccionada {
-  color: rgb(73, 80, 87);
-  margin-top: 0.8rem;
-  font-size: 1rem;
-}
-
-.seccion-acciones {
-  margin-bottom: 2rem;
-}
-
-.boton-agregar-carrito {
-  background: rgb(40, 167, 69);
-  color: rgb(255, 255, 255);
-  border: none;
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  border-radius: 8px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.boton-agregar-carrito:hover {
-  background: rgb(33, 136, 56);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
-}
-
-.icono-carrito {
-  font-size: 1.4rem;
-}
-
-.badge-cantidad {
-  background: rgb(255, 255, 255);
-  color: rgb(40, 167, 69);
-  padding: 0.2rem 0.6rem;
-  border-radius: 50%;
-  font-size: 0.9rem;
-  margin-left: 0.5rem;
-}
-
-.tarjeta-beneficios {
-  background: rgb(248, 249, 250);
-  border-radius: 10px;
-  padding: 1.5rem;
-  border: 1px solid rgb(222, 226, 230);
-}
-
-.beneficio-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.2rem;
-}
-
-.beneficio-item:last-child {
-  margin-bottom: 0;
-}
-
-.icono-beneficio {
-  font-size: 1.8rem;
-}
-
-.texto-beneficio {
-  color: rgb(108, 117, 125);
+/* ===== RESET Y BASE ===== */
+* {
   margin: 0;
-  font-size: 0.9rem;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.contenedor-centrado {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.texto-carga {
-  color: rgb(108, 117, 125);
-  font-size: 1.1rem;
-}
-
-
-.imagen-placeholder {
-  background: rgb(233, 236, 239);
-  color: rgb(73, 80, 87);
-}
-
-
-@media (max-width: 768px) {
-  .fila {
-    flex-direction: column;
-    gap: 2rem;
-  }
-  
-  .contenedor-imagen-producto {
-    height: 300px;
-    padding: 1rem;
-  }
-  
-  .titulo-producto {
-    font-size: 1.8rem;
-  }
-  
-  .precio-producto {
-    font-size: 2rem;
-  }
-  
-  .boton-agregar-carrito {
-    padding: 0.8rem 1.5rem;
-    font-size: 1.1rem;
-  }
-}
-
-.cart-item {
-  transition: all 0.3s ease;
-}
-
-.cart-item:hover {
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f8f9fa;
+  padding-top: 70px; /* ¡ESTO ES LO MÁS IMPORTANTE! */
 }
 
-.cart-widget {
-  position: relative;
-  display: inline-block;
-  color: white;
+/* ===== NAVBAR ===== */
+.navbar {
+  background-color: #d32f2f; /* Rojo bomberos */
+  padding: 0.5rem 0;
+  position: fixed; /* Fijo arriba */
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  height: 70px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.navbar-brand {
+  color: white !important;
+  font-weight: bold;
   font-size: 1.5rem;
   text-decoration: none;
 }
 
-.cart-widget .badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  font-size: 0.7rem;
-  padding: 0.25rem 0.5rem;
+.nav-links {
+  display: flex;
+  gap: 20px;
 }
 
-/* Responsive */
+.nav-link {
+  color: white !important;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== HERO/HOME ===== */
+.hero {
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+              url('https://images.unsplash.com/photo-1540324155971-d2ade43c2b64?q=80&w=2070');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  padding: 4rem 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+/* ===== BOTONES ===== */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background-color: #d32f2f;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #b71c1c;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid #d32f2f;
+  color: #d32f2f;
+}
+
+.btn-outline:hover {
+  background-color: #d32f2f;
+  color: white;
+}
+
+/* ===== PRODUCTOS ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.product-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1rem;
+  background: white;
+  transition: transform 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.product-card h3 {
+  margin: 1rem 0 0.5rem;
+  color: #333;
+}
+
+.product-card .price {
+  color: #d32f2f;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* ===== CARRITO ===== */
+.cart-page {
+  padding: 2rem;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 1rem;
+}
+
+.cart-total {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: right;
+  margin-top: 2rem;
+  color: #d32f2f;
+}
+
+/* ===== CHECKOUT ===== */
+.checkout-form {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.checkout-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .cart-item .row > div {
-    margin-bottom: 1rem;
+  body {
+    padding-top: 60px;
   }
   
-  .cart-item .text-end {
-    text-align: left !important;
+  .navbar {
+    height: 60px;
+  }
+  
+  .hero h1 {
+    font-size: 2rem;
+  }
+  
+  .nav-links {
+    display: none; /* O usa un menú hamburguesa */
+  }
+  
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 }

@@ -1,68 +1,88 @@
+// src/components/ItemDetail.jsx - Adaptado para tus productos
 import React, { useState } from 'react';
-import ItemCount from './ItemCount';
-import { useCart } from '../context/CartContext'; // Importar Context
+import { useCart } from '../context/useCart';
 
-const ItemDetail = ({ product }) => {
+function ItemDetail({ producto }) {
+  const { agregarAlCarrito } = useCart();
   const [cantidad, setCantidad] = useState(1);
-  const [agregado, setAgregado] = useState(false); // Estado para ocultar contador
-  const { agregarAlCarrito } = useCart(); // Usar Context
 
-  const manejarAgregarAlCarrito = () => {
-    agregarAlCarrito(product, cantidad); // Agregar al carrito global
-    setAgregado(true); // Ocultar contador
-    alert(`✅ Agregaste ${cantidad} unidad(es) de "${product.title}" al carrito`);
+  // Función para manejar agregar
+  const handleAgregar = () => {
+    if (!producto) return;
+    
+    // Crear objeto compatible con el carrito
+    const productoParaCarrito = {
+      id: producto.id,
+      nombre: producto.titulo,  // ← Usamos "titulo" como "nombre"
+      precio: producto.precio,
+      imagen: producto.imagen,
+      descripcion: producto.descripcion,
+      stock: producto.stock
+    };
+    
+    agregarAlCarrito(productoParaCarrito, cantidad);
+    alert(`Agregaste ${cantidad} ${producto.titulo} al carrito`);
   };
 
-  const manejarCambioCantidad = (nuevaCantidad) => {
+  // Controlar cantidad máxima (no superar stock)
+  const handleCantidadChange = (nuevaCantidad) => {
+    if (nuevaCantidad < 1) return;
+    if (nuevaCantidad > producto.stock) {
+      alert(`Solo hay ${producto.stock} unidades disponibles`);
+      return;
+    }
     setCantidad(nuevaCantidad);
   };
 
-  if (!product) {
-    return <div className="text-center">Cargando producto...</div>;
-  }
-
   return (
-    <div className="row">
-      <div className="col-md-6">
-        <img src={product.image} className="img-fluid" alt={product.title} />
+    <div className="producto-detalle">
+      <img 
+        src={producto.imagen} 
+        alt={producto.titulo}
+        style={{ width: '300px', borderRadius: '10px' }}
+      />
+      <h2>{producto.titulo}</h2>
+      <p>{producto.descripcion}</p>
+      <p><strong>Precio: ${producto.precio.toLocaleString()}</strong></p>
+      <p>Stock disponible: {producto.stock}</p>
+      
+      {/* Selector de cantidad */}
+      <div style={{ margin: '20px 0' }}>
+        <button 
+          onClick={() => handleCantidadChange(cantidad - 1)}
+          style={{ padding: '5px 15px', marginRight: '10px' }}
+        >
+          -
+        </button>
+        <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+          {cantidad}
+        </span>
+        <button 
+          onClick={() => handleCantidadChange(cantidad + 1)}
+          style={{ padding: '5px 15px', marginLeft: '10px' }}
+        >
+          +
+        </button>
       </div>
-      <div className="col-md-6">
-        <h2>{product.title}</h2>
-        <p className="text-muted">{product.description}</p>
-        <p className="h4 text-primary">${product.price}</p>
-        
-        {/* MOSTRAR CONTADOR O MENSAJE DE AGREGADO */}
-        {!agregado ? (
-          <>
-            <ItemCount 
-              stock={10} 
-              cantidadInicial={1} 
-              alCambiarCantidad={manejarCambioCantidad} 
-            />
-            <button 
-              className="btn btn-success mt-3"
-              onClick={manejarAgregarAlCarrito} // ← BOTÓN AQUÍ
-            >
-              Agregar al carrito
-            </button>
-          </>
-        ) : (
-          <div className="alert alert-success mt-3">
-            <p>✅ Producto agregado al carrito</p>
-            <button className="btn btn-outline-success">
-              Ir al carrito
-            </button>
-            <button 
-              className="btn btn-link" 
-              onClick={() => setAgregado(false)}
-            >
-              Agregar más
-            </button>
-          </div>
-        )}
-      </div>
+      
+      {/* Botón agregar */}
+      <button 
+        onClick={handleAgregar}
+        disabled={producto.stock === 0}
+        style={{
+          backgroundColor: producto.stock > 0 ? '#d32f2f' : '#ccc',
+          color: 'white',
+          padding: '12px 30px',
+          border: 'none',
+          borderRadius: '5px',
+          fontSize: '1rem',
+          cursor: producto.stock > 0 ? 'pointer' : 'not-allowed'
+        }}
+      >
+        {producto.stock > 0 ? 'AGREGAR AL CARRITO' : 'SIN STOCK'}
+      </button>
     </div>
   );
-};
+}
 
 export default ItemDetail;

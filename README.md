@@ -18,3 +18,24 @@ If you are developing a production application, we recommend using TypeScript wi
 =======
 # Reacts-JS
 >>>>>>> 7362ad4898ff17709c0ea6e16603ea8b76829367
+
+# Mi Proyecto Final - Tienda de Bomberos
+
+Esta es mi tienda online de equipos para bomberos.
+
+## Cómo funciona
+- Veo productos
+- Los agrego al carrito
+- Hago el checkout
+- Se guarda en Firebase
+
+## Tecnologías
+- React JS
+- Firebase
+- Bootstrap
+
+## Para probarlo
+npm install
+npm start
+
+Hecho por Matias Mattea
