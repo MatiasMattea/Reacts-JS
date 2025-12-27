@@ -1,4 +1,3 @@
-// src/context/useCart.js - DEBE SER EXACTO
 import { useContext } from 'react';
 import { CartContext } from './CartContext';
 
@@ -9,7 +8,6 @@ export const useCart = () => {
     throw new Error('useCart debe usarse dentro de CartProvider');
   }
   
-  // Verificar que el contexto tenga las propiedades esperadas
   const { carrito = [], total = 0, totalUnidades = 0, ...rest } = context;
   
   return {

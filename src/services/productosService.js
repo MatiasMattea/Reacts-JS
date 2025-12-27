@@ -1,5 +1,3 @@
-// src/services/productosService.js - COPIA Y PEGA TODO
-// 1. ARRAY COMPLETO DE TUS PRODUCTOS
 const productos = [
   { 
     id: 1, 
@@ -35,7 +33,7 @@ const productos = [
     descripcion: "El casco de protección modelo EOM representa el mejor sistema de protección de la cabeza en extinción de incendios forestales, rescate técnico, rescate en altura y rescate en aguas torrenciales.", 
     imagen: "/images/cascoforestal.png", 
     categoria: "cascos",
-    stock: 12
+    stock: 0
   },
   { 
     id: 5, 
@@ -125,7 +123,7 @@ const productos = [
     descripcion: "Guantes ideales para la protección de trabajos de incendio. Su diseño y material permiten buena destreza y manipulación de elementos, además, están confeccionados en cuero vaqueta que ofrece resistencia y duración en proteger frente a las altas temperaturas.", 
     imagen: "/images/guantesforetales1.png", 
     categoria: "guantes",
-    stock: 22
+    stock: 0
   }
 ];
 

@@ -1,12 +1,10 @@
-// src/components/CartItem.jsx - VERSIÓN SEGURA
 import React from 'react';
 import { useCart } from '../context/useCart';
 
 const CartItem = ({ item }) => {
   const { eliminarDelCarrito } = useCart();
   
-  // Validar que el item tenga los datos necesarios
-  if (!item) {
+    if (!item) {
     return (
       <div className="cart-item alert alert-warning">
         <p>Producto no disponible</p>
@@ -33,13 +31,13 @@ const CartItem = ({ item }) => {
           />
         </div>
         
-        {/* Nombre */}
+
         <div className="col-md-4">
           <h5 className="mb-1">{nombreProducto}</h5>
           <p className="text-muted mb-0">ID: {id || 'N/A'}</p>
         </div>
         
-        {/* Precio unitario */}
+
         <div className="col-md-2">
           <p className="mb-0">
             <strong>Precio:</strong><br />
@@ -47,7 +45,7 @@ const CartItem = ({ item }) => {
           </p>
         </div>
         
-        {/* Cantidad */}
+
         <div className="col-md-2">
           <p className="mb-0">
             <strong>Cantidad:</strong><br />
@@ -55,7 +53,7 @@ const CartItem = ({ item }) => {
           </p>
         </div>
         
-        {/* Subtotal */}
+
         <div className="col-md-1">
           <p className="mb-0 text-danger">
             <strong>Subtotal:</strong><br />
@@ -63,7 +61,7 @@ const CartItem = ({ item }) => {
           </p>
         </div>
         
-        {/* Eliminar */}
+
         <div className="col-md-1 text-end">
           <button 
             onClick={() => eliminarDelCarrito(id)}

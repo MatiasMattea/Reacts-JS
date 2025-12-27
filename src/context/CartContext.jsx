@@ -1,4 +1,3 @@
-// src/context/CartContext.jsx - VERSIÓN PARA TUS PRODUCTOS
 import React, { createContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
@@ -13,7 +12,6 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('carrito', JSON.stringify(carrito));
   }, [carrito]);
 
-  // AGREGAR: Adaptado para tus productos (titulo → nombre)
   const agregarAlCarrito = (producto, cantidad = 1) => {
     setCarrito(prevCarrito => {
       const existe = prevCarrito.find(item => item.id === producto.id);
@@ -25,10 +23,9 @@ export const CartProvider = ({ children }) => {
             : item
         );
       } else {
-        // Convertir "titulo" a "nombre" para consistencia
         return [...prevCarrito, { 
           ...producto, 
-          nombre: producto.titulo || producto.nombre, // Usa titulo si no hay nombre
+          nombre: producto.titulo || producto.nombre, 
           cantidad 
         }];
       }
@@ -43,7 +40,6 @@ export const CartProvider = ({ children }) => {
     setCarrito([]);
   };
 
-  // Calcular total: usa producto.precio
   const total = carrito.reduce((sum, item) => 
     sum + (item.precio * item.cantidad), 0
   );

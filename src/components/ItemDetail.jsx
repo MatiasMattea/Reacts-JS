@@ -1,19 +1,196 @@
-// src/components/ItemDetail.jsx - Adaptado para tus productos
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { useCart } from '../context/useCart';
 
-function ItemDetail({ producto }) {
-  const { agregarAlCarrito } = useCart();
-  const [cantidad, setCantidad] = useState(1);
+const productosEjemplo = [
+  { 
+    id: 1, 
+    titulo: "Casco Bullard LTX", 
+    precio: 50000, 
+    descripcion: "Diseñado para ayudar a proteger la cabeza del bombero y el cuello.", 
+    imagen: "/images/cascobulllard.png", 
+    categoria: "cascos",
+    stock: 8
+  },
+  { 
+    id: 2, 
+    titulo: "Casco Rosembauer Heros Titan", 
+    precio: 70000, 
+    descripcion: "Es la seguridad de la experiencia. La facilidad que se obtiene del conocimiento y la tecnología. Es la realización de ideas innovadoras", 
+    imagen: "/images/casco_rosembauer.png", 
+    categoria: "cascos",
+    stock: 5
+  },
+  { 
+    id: 3, 
+    titulo: "Casco VFR-EVO", 
+    precio: 73000, 
+    descripcion: "El casco Bomberos VFR-EVO cuenta con un sistema de conexión universal de dos puntos para máscaras antigás en los laterales de la calota, ajustable individualmente, lo que lo hace compatible con todas las máscaras del mercado y crea una combinación casco-máscara eficiente y segura.", 
+    imagen: "/images/casco2.png", 
+    categoria: "cascos",
+    stock: 10
+  },
+  { 
+    id: 4, 
+    titulo: "Casco Forestal EOM", 
+    precio: 45800, 
+    descripcion: "El casco de protección modelo EOM representa el mejor sistema de protección de la cabeza en extinción de incendios forestales, rescate técnico, rescate en altura y rescate en aguas torrenciales.", 
+    imagen: "/images/cascoforestal.png", 
+    categoria: "cascos",
+    stock: 0
+  },
+  { 
+    id: 5, 
+    titulo: "Casco forestal Bullard", 
+    precio: 62000, 
+    descripcion: "Casco de ala completa con estilo sombrero, ideal para brindar seguridad y comodidad al personal de bomberos. Su cómodo diseño termoplástico ofrece una alta resistencia a temperaturas extremas.", 
+    imagen: "/images/cascoforestal1.png", 
+    categoria: "cascos",
+    stock: 7
+  },
+  { 
+    id: 6, 
+    titulo: "Chaqueta y Pantalon MSA", 
+    precio: 500000, 
+    descripcion: "El diseño Ergotech Action 2 de MSA Bristol, desarrollado tras una cuidadosa investigación y extensas pruebas con usuarios sobre la ergonomía de las actividades de los bomberos más frecuentes en el día a día, se ha convertido en el estándar por el que se miden los EPP ligeros para bomberos en cuanto a comodidad y rendimiento.", 
+    imagen: "/images/Ropa-msa.png", 
+    categoria: "ropa",
+    stock: 4
+  },
+  { 
+    id: 7, 
+    titulo: "Chaqueta y Pantalon Rosembauer", 
+    precio: 800000, 
+    descripcion: "Un traje de protección que parece una segunda piel y que, por lo tanto, puede llevarse durante muchas horas sin que suponga cansancio adicional: ese era el objetivo al diseñar el GAROS G30. Rosenbauer ha implementado muchas de las características del popular traje de bomberos de alta calidad FIRE FLEX. La combinación de corte ergonómico, materiales de alta calidad y peso reducido hace que el GAROS G30 sea la prenda de protección perfecta para todo el personal de los servicios de emergencia cuya función no es la extinción de incendios", 
+    imagen: "/images/ropa-rosem.png", 
+    categoria: "ropa",
+    stock: 3
+  },
+  { 
+    id: 8, 
+    titulo: "Estructural forestal", 
+    precio: 200000, 
+    descripcion: "Forestal Inforest", 
+    imagen: "/images/forestal.png", 
+    categoria: "ropa",
+    stock: 15
+  },
+  { 
+    id: 9, 
+    titulo: "Estructural forestal", 
+    precio: 250000, 
+    descripcion: "La camisa y pantalón están fabricados en tejido inherentemente ignífugo, tanto la tela como su diseño ofrecen una alta protección y resistencia frente a las llamas. Además, es muy confortable para el usuario aún en una jornada de trabajo intensa.", 
+    imagen: "/images/forestal1.png", 
+    categoria: "ropa",
+    stock: 9
+  },
+  { 
+    id: 10, 
+    titulo: "Mameluco forestal", 
+    precio: 80000, 
+    descripcion: "Fabricado en tejido ignífugo de excelente calidad, una tela suave que evita irritaciones, elimina la transpiración y disipa el calor corporal. Diseño ergonómico y reforzado para mayor resistencia y duración ante cualquier esfuerzo.", 
+    imagen: "/images/mamelucoforestal.png", 
+    categoria: "ropa",
+    stock: 20
+  },
+  { 
+    id: 11, 
+    titulo: "Guantes de Incendio", 
+    precio: 30000, 
+    descripcion: "El SAFE GRIP 3 combina características de protección maximas con un dinámico diseño. Garantiza protección y comodidad para el bombero profesional. Para ello, los materiales seleccionados se procesan con el mayor cuidado posible. Los guantes de bombero son parte del equipamiento de protección de los bomberos y, por lo tanto, son indispensables durante las intervenciones de combate de incendios e intervenciones técnicas de rescate.", 
+    imagen: "/images/Guantes.jpg", 
+    categoria: "guantes",
+    stock: 25
+  },
+  { 
+    id: 12, 
+    titulo: "Guantes de Incendio", 
+    precio: 40000, 
+    descripcion: "Estos cómodos guantes están confeccionados en cuero ignífugo con tratamiento hidrófugo que evita el paso de la humedad externa hacia el interior, manteniendo las manos secas y permitiendo la destreza del bombero.", 
+    imagen: "/images/guantesestructurales.png", 
+    categoria: "guantes",
+    stock: 18
+  },
+  { 
+    id: 13, 
+    titulo: "Guantes de Incendio Forestal", 
+    precio: 20000, 
+    descripcion: "Guantes ideales para la protección de trabajos de incendio. Su diseño y material permiten buena destreza y manipulación de elementos, además, están confeccionados en cuero vaqueta que ofrece resistencia y duración en proteger frente a las altas temperaturas.", 
+    imagen: "/images/guantesforetales.png", 
+    categoria: "guantes",
+    stock: 30
+  },
+  { 
+    id: 14, 
+    titulo: "Guantes de Incendio Forestal", 
+    precio: 20000, 
+    descripcion: "Guantes ideales para la protección de trabajos de incendio. Su diseño y material permiten buena destreza y manipulación de elementos, además, están confeccionados en cuero vaqueta que ofrece resistencia y duración en proteger frente a las altas temperaturas.", 
+    imagen: "/images/guantesforetales1.png", 
+    categoria: "guantes",
+    stock: 0
+  }
+];
 
-  // Función para manejar agregar
+const ItemDetail = () => {
+  const { id } = useParams();
+  const { agregarAlCarrito } = useCart();
+  const [producto, setProducto] = useState(null);
+  const [cantidad, setCantidad] = useState(1);
+  const [loading, setLoading] = useState(true);
+
+  
+  useEffect(() => {
+    console.log("Buscando producto ID:", id);
+    
+    setTimeout(() => {
+
+      const idNum = parseInt(id);
+      const productoEncontrado = productosEjemplo.find(p => p.id === idNum);
+      
+      console.log("Producto encontrado:", productoEncontrado);
+      
+      if (productoEncontrado) {
+        setProducto(productoEncontrado);
+      }
+      setLoading(false);
+    }, 300);
+  }, [id]); 
+
+
+  if (loading) {
+    return (
+      <div className="container text-center py-5">
+        <div className="spinner-border text-danger" style={{width: '3rem', height: '3rem'}}>
+          <span className="visually-hidden">Cargando...</span>
+        </div>
+        <p className="mt-3">Cargando producto...</p>
+      </div>
+    );
+  }
+
+
+  if (!producto) {
+    return (
+      <div className="container text-center py-5">
+        <div className="card shadow-sm" style={{maxWidth: '500px', margin: '0 auto'}}>
+          <div className="card-body py-5">
+            <h3 className="text-danger"> Producto no encontrado</h3>
+            <p className="text-muted">No se encontró el producto con ID: {id}</p>
+            <Link to="/products" className="btn btn-primary">
+              Ver todos los productos
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const handleAgregar = () => {
     if (!producto) return;
     
-    // Crear objeto compatible con el carrito
     const productoParaCarrito = {
       id: producto.id,
-      nombre: producto.titulo,  // ← Usamos "titulo" como "nombre"
+      nombre: producto.titulo,
       precio: producto.precio,
       imagen: producto.imagen,
       descripcion: producto.descripcion,
@@ -21,68 +198,124 @@ function ItemDetail({ producto }) {
     };
     
     agregarAlCarrito(productoParaCarrito, cantidad);
-    alert(`Agregaste ${cantidad} ${producto.titulo} al carrito`);
+    alert(`✅ ¡Agregaste ${cantidad} ${producto.titulo} al carrito!`);
   };
 
-  // Controlar cantidad máxima (no superar stock)
   const handleCantidadChange = (nuevaCantidad) => {
     if (nuevaCantidad < 1) return;
     if (nuevaCantidad > producto.stock) {
-      alert(`Solo hay ${producto.stock} unidades disponibles`);
+      alert(` Solo hay ${producto.stock} unidades disponibles`);
       return;
     }
     setCantidad(nuevaCantidad);
   };
 
   return (
-    <div className="producto-detalle">
-      <img 
-        src={producto.imagen} 
-        alt={producto.titulo}
-        style={{ width: '300px', borderRadius: '10px' }}
-      />
-      <h2>{producto.titulo}</h2>
-      <p>{producto.descripcion}</p>
-      <p><strong>Precio: ${producto.precio.toLocaleString()}</strong></p>
-      <p>Stock disponible: {producto.stock}</p>
-      
-      {/* Selector de cantidad */}
-      <div style={{ margin: '20px 0' }}>
-        <button 
-          onClick={() => handleCantidadChange(cantidad - 1)}
-          style={{ padding: '5px 15px', marginRight: '10px' }}
-        >
-          -
-        </button>
-        <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
-          {cantidad}
-        </span>
-        <button 
-          onClick={() => handleCantidadChange(cantidad + 1)}
-          style={{ padding: '5px 15px', marginLeft: '10px' }}
-        >
-          +
-        </button>
+    <div className="container py-5">
+      <div className="row">
+        <div className="col-lg-6 mb-4">
+          <div className="card shadow-sm border-0">
+            <div className="card-body p-4 text-center">
+              <img 
+                src={producto.imagen} 
+                alt={producto.titulo}
+                className="img-fluid rounded"
+                style={{
+                  maxHeight: '400px',
+                  objectFit: 'contain',
+                  width: '100%'
+                }}
+                onError={(e) => {
+                  e.target.src = 'https://via.placeholder.com/500x400/FF6B6B/FFFFFF?text=Imagen+no+disponible';
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        
+        <div className="col-lg-6">
+          <div className="card shadow-sm border-0 h-100">
+            <div className="card-body p-4 d-flex flex-column">
+              <h1 className="mb-3">{producto.titulo}</h1>
+              
+              <div className="mb-4">
+                <span className="badge bg-danger fs-6 mb-3">
+                  {producto.categoria?.charAt(0).toUpperCase() + producto.categoria?.slice(1)}
+                </span>
+                
+                <p className="text-muted mb-4">{producto.descripcion}</p>
+                
+                <div className="d-flex align-items-center mb-4">
+                  <span className="fs-5 me-2">Stock:</span>
+                  <span className={`badge ${producto.stock > 0 ? 'bg-success' : 'bg-danger'} fs-6`}>
+                    {producto.stock > 0 ? `${producto.stock} unidades` : 'Sin stock'}
+                  </span>
+                </div>
+                
+                <h2 className="text-danger mb-4">
+                  ${producto.precio?.toLocaleString()}
+                </h2>
+              </div>
+              
+              {producto.stock > 0 && (
+                <div className="mb-4">
+                  <label className="form-label fs-5">Cantidad:</label>
+                  <div className="d-flex align-items-center" style={{maxWidth: '200px'}}>
+                    <button 
+                      className="btn btn-outline-danger rounded-circle"
+                      onClick={() => handleCantidadChange(cantidad - 1)}
+                      disabled={cantidad <= 1}
+                      style={{width: '45px', height: '45px'}}
+                    >
+                      <strong>-</strong>
+                    </button>
+                    
+                    <span className="mx-4 fs-3 fw-bold">{cantidad}</span>
+                    
+                    <button 
+                      className="btn btn-outline-danger rounded-circle"
+                      onClick={() => handleCantidadChange(cantidad + 1)}
+                      disabled={cantidad >= producto.stock}
+                      style={{width: '45px', height: '45px'}}
+                    >
+                      <strong>+</strong>
+                    </button>
+                  </div>
+                  <small className="text-muted d-block mt-2">
+                    Disponible: {producto.stock} unidades
+                  </small>
+                </div>
+              )}
+              
+              <div className="mt-auto">
+                {producto.stock > 0 ? (
+                  <button 
+                    onClick={handleAgregar}
+                    className="btn btn-danger btn-lg w-100 py-3 mb-3"
+                  >
+                    Agregar al carrito
+                  </button>
+                ) : (
+                  <button className="btn btn-secondary btn-lg w-100 py-3 mb-3" disabled>
+                    Sin stock disponible
+                  </button>
+                )}
+                
+                <div className="d-flex gap-2">
+                  <Link to="/products" className="btn btn-outline-primary flex-grow-1">
+                    ← Seguir comprando
+                  </Link>
+                  <Link to="/cart" className="btn btn-outline-danger flex-grow-1">
+                    Ver carrito →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      {/* Botón agregar */}
-      <button 
-        onClick={handleAgregar}
-        disabled={producto.stock === 0}
-        style={{
-          backgroundColor: producto.stock > 0 ? '#d32f2f' : '#ccc',
-          color: 'white',
-          padding: '12px 30px',
-          border: 'none',
-          borderRadius: '5px',
-          fontSize: '1rem',
-          cursor: producto.stock > 0 ? 'pointer' : 'not-allowed'
-        }}
-      >
-        {producto.stock > 0 ? 'AGREGAR AL CARRITO' : 'SIN STOCK'}
-      </button>
     </div>
   );
-}
+};
 
 export default ItemDetail;

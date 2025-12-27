@@ -1,18 +1,17 @@
-import React, { useState } from "react";
-import { useCart } from '../context/useCart';
-import { db } from "../services/firebase/config";  // ← Importar desde config.js
-import { collection, addDoc } from "firebase/firestore";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Checkout = () => {
-  const { carrito, total, vaciarCarrito } = useCart();
   const [formData, setFormData] = useState({
-    nombre: "",
-    email: "",
-    telefono: "",
-    direccion: ""
+    nombre: '',
+    email: '',
+    telefono: '',
+    direccion: ''
   });
-  const [ordenId, setOrdenId] = useState(null);
-  const [loading, setLoading] = useState(false);
+
+
+  const total = 2400000.00;
+
 
   const handleChange = (e) => {
     setFormData({
@@ -21,127 +20,158 @@ const Checkout = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-
-    try {
-      // 1. Crear el objeto de la orden
-      const orden = {
-        comprador: formData,
-        items: carrito.map(item => ({
-          id: item.id,
-          nombre: item.nombre,
-          precio: item.precio,
-          cantidad: item.cantidad
-        })),
-        total: total,
-        fecha: new Date().toISOString(),
-        estado: "pendiente"
-      };
-
-      // 2. Guardar en Firebase
-      const ordersRef = collection(db, "orders");  // "orders" es el nombre de la colección
-      const docRef = await addDoc(ordersRef, orden);
-
-      // 3. Mostrar éxito
-      setOrdenId(docRef.id);
-      vaciarCarrito();
-      
-    } catch (error) {
-      console.error("Error al crear la orden:", error);
-      alert("Hubo un error al procesar tu compra. Intenta nuevamente.");
-    } finally {
-      setLoading(false);
-    }
+    alert('¡Compra confirmada! Gracias por tu pedido.');
   };
 
-  if (ordenId) {
-    return (
-      <div style={{ padding: "20px", textAlign: "center" }}>
-        <h2>¡Compra realizada con éxito! ✅</h2>
-        <p>Tu número de orden es:</p>
-        <h3>{ordenId}</h3>
-        <p>Te enviamos los detalles a: {formData.email}</p>
-        <button onClick={() => window.location.href = "/"}>
-          Volver al inicio
-        </button>
-      </div>
-    );
-  }
-
   return (
-    <div style={{ maxWidth: "500px", margin: "0 auto", padding: "20px" }}>
-      <h2>Finalizar Compra</h2>
-      <p style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-        Total a pagar: ${total.toFixed(2)}
-      </p>
+    <div className="container" style={{ paddingTop: '100px', paddingBottom: '50px' }}>
+      
+      {/* TÍTULO */}
+      <div className="row mb-5">
+        <div className="col-12 text-center">
+          <h1 className="text-danger fw-bold display-5">FINALIZAR COMPRA</h1>
+          <p className="text-muted lead">Completa tus datos para recibir el pedido</p>
+        </div>
+      </div>
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "15px" }}>
-          <label>Nombre completo *</label>
-          <input
-            type="text"
-            name="Matias"
-            value={formData.nombre}
-            onChange={handleChange}
-            required
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
-          />
+      <div className="row justify-content-center">
+        
+        {/* FORMULARIO */}
+        <div className="col-12 col-md-10 col-lg-5 mb-4 mb-lg-0">
+          <div className="card shadow h-100">
+            <div className="card-body p-4">
+              <h3 className="text-danger mb-4">
+                <i className="bi bi-person-fill me-2"></i>
+                INFORMACION PERSONAL
+              </h3>
+              
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label className="form-label fw-bold">Nombre Completo *</label>
+                  
+                  <input 
+                    type="text" 
+                    name="nombre"
+                    value={formData.nombre}
+                    onChange={handleChange}
+                    className="form-control" 
+                    required 
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label fw-bold">Email *</label>
+                  
+                  <input 
+                    type="email" 
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="form-control" 
+                    required 
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label fw-bold">Teléfono *</label>
+                  <input 
+                    type="tel" 
+                    name="telefono"
+                    value={formData.telefono}
+                    onChange={handleChange}
+                    className="form-control" 
+                    required 
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="form-label fw-bold">Dirección *</label>
+                  
+                  <textarea 
+                    name="direccion"
+                    value={formData.direccion}
+                    onChange={handleChange}
+                    className="form-control" 
+                    rows="3" 
+                    required
+                  ></textarea>
+                </div>
+
+                <button type="submit" className="btn btn-danger btn-lg w-100 py-3">
+                  <i className="bi bi-check-circle me-2"></i>
+                  CONFIRMAR COMPRA
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
 
-        <div style={{ marginBottom: "15px" }}>
-          <label>Email *</label>
-          <input
-            type="email"
-            name="matias.mattea@gmaIL.COM"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
-          />
-        </div>
+        
+        <div className="col-12 col-md-10 col-lg-5">
+          <div className="card shadow h-100">
+            <div className="card-body p-4">
+              <h3 className="text-danger mb-4">
+                <i className="bi bi-credit-card-fill me-2"></i>
+                RESUMEN DEL PAGO
+              </h3>
+              
+              
+              <div className="bg-light rounded-3 p-4 text-center mb-4">
+                <p className="text-muted mb-2">TOTAL A PAGAR</p>
+                <h1 className="text-danger fw-bold" style={{ fontSize: '2.5rem' }}>
+                  ${total.toLocaleString('es-CL')}
+                </h1>
+              </div>
 
-        <div style={{ marginBottom: "15px" }}>
-          <label>Teléfono *</label>
-          <input
-            type="tel"
-            name="3534066820"
-            value={formData.telefono}
-            onChange={handleChange}
-            required
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
-          />
-        </div>
+              
+              <div className="mb-4">
+                <h5 className="fw-bold mb-3">Beneficios:</h5>
+                <div className="mb-2">
+                  <i className="bi bi-check text-success me-2"></i>
+                  Pago 100% seguro
+                </div>
+                <div className="mb-2">
+                  <i className="bi bi-check text-success me-2"></i>
+                  Envío en 24-48 horas
+                </div>
+                <div className="mb-2">
+                  <i className="bi bi-check text-success me-2"></i>
+                  Garantía 1 año
+                </div>
+                <div className="mb-2">
+                  <i className="bi bi-check text-success me-2"></i>
+                  Productos Originales y Certificados bajo Norma NFPA
+                </div>
+              </div>
 
-        <div style={{ marginBottom: "20px" }}>
-          <label>Dirección de envío *</label>
-          <input
-            type="text"
-            name="Lamadrid 344"
-            value={formData.direccion}
-            onChange={handleChange}
-            required
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
-          />
-        </div>
+              
+              <div className="border-top pt-4 mt-3">
+                <div className="text-center">
+                  <i className="bi bi-shield-check text-success fs-2 mb-2"></i>
+                  <p className="text-muted small">Compra 100% segura</p>
+                </div>
+              </div>
 
-        <button 
-          type="submit" 
-          disabled={loading}
-          style={{
-            backgroundColor: loading ? "#ccc" : "#007bff",
-            color: "white",
-            padding: "10px 20px",
-            border: "none",
-            borderRadius: "5px",
-            cursor: loading ? "not-allowed" : "pointer",
-            width: "100%"
-          }}
-        >
-          {loading ? "Procesando..." : "Confirmar Compra"}
-        </button>
-      </form>
+              
+              <div className="mt-4">
+                <Link to="/cart" className="btn btn-outline-dark w-100">
+                  <i className="bi bi-arrow-left me-2"></i>
+                  Volver al carrito
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div className="row mt-5">
+        <div className="col-12 text-center">
+          <p className="text-muted">¿Necesitas ayuda? +56 9 1234 5678</p>
+        </div>
+      </div>
     </div>
   );
 };

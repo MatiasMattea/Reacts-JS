@@ -1,18 +1,16 @@
-// src/components/ItemListContainer.jsx - VERSIÓN SIN ERROR
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ItemList from './ItemList';
 import { obtenerProductos, obtenerProductosPorCategoria } from '../services/productosService';
 
 const ItemListContainer = ({ greeting }) => {
-  // OBTENER PARÁMETROS CORRECTAMENTE - SOLO UNA VEZ AL PRINCIPIO
+
   const { id } = useParams();
   
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // DEBUG: Ver parámetros recibidos
   console.log('DEBUG - Componente ItemListContainer montado');
   console.log('DEBUG - Parámetro id recibido:', id);
   console.log('DEBUG - Parámetro greeting:', greeting);
@@ -20,36 +18,46 @@ const ItemListContainer = ({ greeting }) => {
   useEffect(() => {
     console.log('DEBUG - useEffect ejecutándose con id:', id);
     
-    setLoading(true);
-    setError(null);
+    const controller = new AbortController();
     
-    // Validar categoría
-    if (id) {
-      console.log('DEBUG - Filtrando por categoría:', id);
-    } else {
-      console.log('DEBUG - Mostrando todos los productos');
-    }
-    
-    const fetchProductos = id 
-      ? obtenerProductosPorCategoria(id)
-      : obtenerProductos();
-    
-    fetchProductos
-      .then((data) => {
-        console.log('DEBUG - Productos recibidos:', data.length, 'productos');
-        console.log('DEBUG - Primer producto:', data[0]);
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
         
-        setProductos(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('ERROR - Al obtener productos:', error);
-        setError('Error al cargar los productos');
-        setLoading(false);
-      });
+        if (id) {
+          console.log('DEBUG - Filtrando por categoría:', id);
+        } else {
+          console.log('DEBUG - Mostrando todos los productos');
+        }
+        
+        const data = id 
+          ? await obtenerProductosPorCategoria(id)
+          : await obtenerProductos();
+        
+        if (!controller.signal.aborted) {
+          console.log('DEBUG - Productos recibidos:', data.length, 'productos');
+          console.log('DEBUG - Primer producto:', data[0]);
+          
+          setProductos(data);
+          setLoading(false);
+        }
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          console.error('ERROR - Al obtener productos:', error);
+          setError('Error al cargar los productos');
+          setLoading(false);
+        }
+      }
+    };
+    
+    fetchData();
+    
+    return () => {
+      controller.abort();
+    };
   }, [id]);
 
-  // Renderizado
   if (error) {
     return (
       <div className="container text-center mt-5">
@@ -72,7 +80,6 @@ const ItemListContainer = ({ greeting }) => {
         }
       </h1>
       
-      {/* Loading */}
       {loading && (
         <div className="text-center py-5">
           <div className="spinner-border text-danger" style={{width: '3rem', height: '3rem'}}>
@@ -82,7 +89,6 @@ const ItemListContainer = ({ greeting }) => {
         </div>
       )}
       
-      {/* Sin productos */}
       {!loading && productos.length === 0 && (
         <div className="text-center py-5">
           <h3>No se encontraron productos</h3>
@@ -96,7 +102,6 @@ const ItemListContainer = ({ greeting }) => {
         </div>
       )}
       
-      {/* Lista de productos */}
       {!loading && productos.length > 0 && (
         <div>
           <p className="text-muted mb-4">

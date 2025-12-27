@@ -1,19 +1,17 @@
-// src/components/Cart.jsx - VERSIÓN QUE SÍ FUNCIONA
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/useCart';
 import CartItem from './CartItem';
 
 const Cart = () => {
-  // OBTENER EL CARRITO CORRECTAMENTE
   const { carrito, total, vaciarCarrito } = useCart();
   
-  // DEBUG: Ver qué tenemos
+  
   console.log('Cart - carrito:', carrito);
   console.log('Cart - total:', total);
   console.log('Cart - carrito.length:', carrito ? carrito.length : 'undefined');
   
-  // Si carrito es undefined o null, mostrar error
+  
   if (!carrito) {
     return (
       <div className="container text-center py-5">
@@ -26,7 +24,7 @@ const Cart = () => {
     );
   }
   
-  // Si el carrito está vacío (es un array vacío)
+  
   if (carrito.length === 0) {
     return (
       <div className="container text-center py-5">
@@ -43,7 +41,7 @@ const Cart = () => {
     );
   }
   
-  // Calcular total si no viene calculado
+  
   const totalCalculado = total !== undefined ? total : 
     carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
 
@@ -51,7 +49,7 @@ const Cart = () => {
     <div className="container py-4">
       <h1 className="mb-4">Tu Carrito</h1>
       
-      {/* Lista de productos */}
+      
       <div className="card shadow-sm mb-4">
         <div className="card-body">
           {carrito.map((item, index) => (
@@ -63,7 +61,7 @@ const Cart = () => {
         </div>
       </div>
       
-      {/* Resumen */}
+     
       <div className="card shadow-sm">
         <div className="card-body">
           <div className="row">
@@ -77,7 +75,7 @@ const Cart = () => {
             </div>
           </div>
           
-          {/* Acciones */}
+          
           <div className="d-flex gap-3 mt-4">
             <button 
               onClick={vaciarCarrito}
