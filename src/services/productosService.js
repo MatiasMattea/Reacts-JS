@@ -131,12 +131,12 @@ const productosLocal = [
   }
 ];
 
-// FUNCIONES PRINCIPALES
+
 export const obtenerProductos = async () => {
   console.log('🔍 SERVICE - Intentando obtener productos...');
   
   try {
-    // Primero intenta con Firestore
+   
 const querySnapshot = await getDocs(collection(db, "Productos"));    
     if (!querySnapshot.empty) {
       const productosFirestore = querySnapshot.docs.map(doc => ({
@@ -147,12 +147,12 @@ const querySnapshot = await getDocs(collection(db, "Productos"));
       return productosFirestore;
     }
     
-    // Si Firestore está vacío, usa datos locales
+
     console.log('⚠️ SERVICE - Firestore vacío, usando datos locales');
     return productosLocal;
     
   } catch (error) {
-    // Si hay error con Firestore, usa datos locales
+
     console.error('❌ SERVICE - Error con Firestore:', error.message);
     console.log('🔄 SERVICE - Usando datos locales como fallback');
     return productosLocal;
@@ -163,7 +163,7 @@ export const obtenerProductoPorId = async (id) => {
   console.log('🔍 SERVICE - Buscando producto ID:', id);
   
   try {
-    // Primero intenta con Firestore
+
     const productos = await obtenerProductos();
     const producto = productos.find(p => p.id === id || p.id === parseInt(id));
     
@@ -180,7 +180,7 @@ export const obtenerProductosPorCategoria = async (categoriaId) => {
   console.log('🔍 SERVICE - Filtrando por categoría:', categoriaId);
   
   try {
-    // Primero intenta con Firestore
+
     const q = query(
       collection(db, "products"),
       where("category", "==", categoriaId)
@@ -197,14 +197,14 @@ export const obtenerProductosPorCategoria = async (categoriaId) => {
       return productos;
     }
     
-    // Si Firestore no tiene, filtra datos locales
+
     console.log('⚠️ SERVICE - Firestore vacío para categoría, usando datos locales');
     const productosFiltrados = productosLocal.filter(p => p.category === categoriaId);
     console.log('✅ SERVICE - Productos locales (filtrados):', productosFiltrados.length);
     return productosFiltrados;
     
   } catch (error) {
-    // Si hay error, filtra datos locales
+
     console.error('❌ SERVICE - Error al filtrar por categoría:', error.message);
     const productosFiltrados = productosLocal.filter(p => p.category === categoriaId);
     return productosFiltrados;
