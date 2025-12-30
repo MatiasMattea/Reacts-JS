@@ -4,10 +4,12 @@ import { Link } from 'react-router-dom';
 const Home = () => {
   return (
     <div className="container text-center py-5">
+      <div class="container text-center">
       <h1 className="mb-4">EQUIPOS DE PROTECCION PERSONAL PARA BOMBEROS</h1>
       <p className="lead mb-5">
         Encuentra todo el equipamiento necesario para bomberos
       </p>
+      </div>
       
       <div className="row mb-5">
         <div className="col-md-4 mb-3">
