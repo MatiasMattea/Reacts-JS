@@ -7,7 +7,7 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: rgb(248, 249, 250);
-  padding-top: 60rem;
+  padding-top: 70px;
 }
 
 /*NAVBAR*/
@@ -63,7 +63,7 @@ body {
   background-size: cover;
   background-position: center;
   color: rgb(255, 255, 255);
-  padding: 4rem 2rem;
+padding-top: 0.75rem;
   text-align: center;
   margin-bottom: 2rem;
 }

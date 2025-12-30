@@ -127,7 +127,6 @@ const productos = [
   }
 ];
 
-// 2. FUNCIONES DEL SERVICIO
 export const obtenerProductos = () => {
   console.log('SERVICE - Obteniendo TODOS los productos');
   return new Promise((resolve) => {
