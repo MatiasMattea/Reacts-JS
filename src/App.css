@@ -7,15 +7,14 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: rgb(248, 249, 250);
-  padding-top: 70px; 
+  padding-top: 70px;
 }
 
-/* ===== NAVBAR ===== */
 .navbar {
   background-color: rgb(211, 47, 47);
   padding: 0.5rem 0;
   position: fixed;
-  top: 0; 
+  top: 0;
   width: 100%;
   z-index: 9999;
   height: 70px;
@@ -59,7 +58,6 @@ body {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* ===== CARRITO ===== */
 .cart-widget {
   position: relative;
   display: inline-flex;
@@ -85,11 +83,7 @@ body {
 .bandera-argentina {
   width: 30px;
   height: 20px;
-  background: linear-gradient(to bottom, 
-    rgb(117, 170, 219) 33%, 
-    rgb(255, 255, 255) 33%, 
-    rgb(255, 255, 255) 66%, 
-    rgb(117, 170, 219) 66%);
+  background: linear-gradient(to bottom, rgb(117, 170, 219) 33%, rgb(255, 255, 255) 33%, rgb(255, 255, 255) 66%, rgb(117, 170, 219) 66%);
   border: 1px solid rgb(221, 221, 221);
   border-radius: 2px;
   margin-left: 10px;
@@ -140,6 +134,32 @@ body {
   font-weight: bold;
 }
 
+.navbar-toggler {
+  background-color: rgb(255, 255, 255);
+  border: 2px solid rgb(255, 255, 255);
+  color: rgb(211, 47, 47);
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  display: none;
+  transition: all 0.3s;
+}
+
+.navbar-toggler:hover {
+  background-color: rgb(240, 240, 240);
+  transform: scale(1.05);
+}
+
+.cart-desktop {
+  display: block;
+}
+
+.cart-mobile {
+  display: none;
+}
+
 @media (max-width: 768px) {
   body {
     padding-top: 60px;
@@ -149,11 +169,134 @@ body {
     height: 60px;
   }
   
+  .navbar .container {
+    flex-wrap: wrap;
+    padding: 10px;
+  }
+  
+  .navbar-toggler {
+    display: block;
+    order: 3;
+  }
+  
   .nav-links {
     display: none;
+    width: 100%;
+    order: 4;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+    background-color: rgb(183, 28, 28);
+    border-radius: 0 0 10px 10px;
+    margin-top: 10px;
+  }
+  
+  .nav-links.active {
+    display: flex;
+  }
+  
+  .navbar-brand {
+    order: 1;
+    flex-grow: 1;
+    font-size: 1.3rem;
+  }
+  
+  .cart-mobile {
+    display: block;
+    order: 2;
+    margin-left: auto;
+    margin-right: 15px;
+  }
+  
+  .cart-mobile .cart-widget {
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px;
+    padding: 8px 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .cart-desktop {
+    display: none;
+  }
+  
+  .cart-widget {
+    order: 4;
+    margin-left: auto;
   }
   
   .products-grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+@media (min-width: 769px) {
+  .cart-mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+  
+  .navbar-toggler {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .navbar .container {
+    padding: 8px 10px;
+  }
+  
+  .navbar-brand {
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+  }
+  
+  .navbar-toggler {
+    padding: 4px 6px;
+    font-size: 0.7rem;
+    margin-left: 5px;
+  }
+  
+  .cart-mobile {
+    margin-right: 8px;
+  }
+  
+  .cart-mobile .cart-widget {
+    padding: 5px 8px;
+    font-size: 0.9rem;
+    min-width: 40px;
+  }
+  
+  .nav-links {
+    padding: 8px;
+    gap: 8px;
+  }
+  
+  .nav-link {
+    padding: 5px 8px;
+    font-size: 0.85rem;
+  }
+  
+  .bandera-argentina {
+    width: 22px;
+    height: 14px;
+    margin-left: 6px;
+  }
+  
+  .cart-widget .badge {
+    font-size: 0.6rem;
+    min-width: 16px;
+    height: 16px;
+    top: -5px;
+    right: -5px;
   }
 }

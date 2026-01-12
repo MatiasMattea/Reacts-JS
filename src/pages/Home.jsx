@@ -26,7 +26,14 @@ const Home = () => {
              Guantes
           </Link>
         </div>
+        <div className="col-md-4 mb-3">
+          <Link to="/category/botas" className="btn btn-danger btn-lg w-100 py-3">
+             botas
+          </Link>
+        </div>
       </div>
+      
+      
       
       <div className="mt-5">
         <Link to="/products" className="btn btn-outline-danger btn-lg">

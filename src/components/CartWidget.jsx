@@ -6,6 +6,7 @@ const CartWidget = () => {
 
   return (
     <Link to="/cart" className="cart-widget">
+      🛒
       <i className="bi bi-cart3" style={{ fontSize: '1.5rem' }}></i>
       {cantidadTotal > 0 && (
         <span className="badge bg-danger">{cantidadTotal}</span>
