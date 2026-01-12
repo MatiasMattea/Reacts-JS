@@ -7,6 +7,7 @@ import ItemDetailContainer from "./components/ItemDetailContainer";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
 import './App.css';
+import SearchResultsPage from './pages/SearchResultsPage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/item/:id" element={<ItemDetailContainer />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/search" element={<SearchResultsPage />} />
         </Routes>
       </BrowserRouter>
     </CartProvider>

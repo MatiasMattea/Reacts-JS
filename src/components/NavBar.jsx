@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CartWidget from './CartWidget';
+import SearchBar from './SearchBar';
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -9,7 +10,6 @@ const NavBar = () => {
     setMenuOpen(!menuOpen);
   };
 
-  // CIERRA EL MENÚ AL HACER CLIC EN CUALQUIER LADO
   useEffect(() => {
     const closeMenu = () => {
       if (menuOpen) {
@@ -17,10 +17,8 @@ const NavBar = () => {
       }
     };
 
-    // Agrega event listener al documento
     document.addEventListener('click', closeMenu);
     
-    // Limpia el event listener
     return () => {
       document.removeEventListener('click', closeMenu);
     };
@@ -32,6 +30,10 @@ const NavBar = () => {
         <Link to="/" className="navbar-brand" onClick={(e) => e.stopPropagation()}>
           🚒 M2M TIENDA PARA BOMBEROS
         </Link>
+        
+        <div className="search-container">
+          <SearchBar />
+        </div>
         
         <div className="cart-mobile" onClick={(e) => e.stopPropagation()}>
           <CartWidget />

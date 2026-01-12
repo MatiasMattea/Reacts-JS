@@ -13,7 +13,7 @@ const ItemDetailContainer = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  console.log("📌 ID del producto:", id);
+  console.log(" ID del producto:", id);
 
   useEffect(() => {
     console.log(" useEffect ejecutado con id:", id);

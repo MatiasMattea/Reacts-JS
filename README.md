@@ -27,3 +27,23 @@ E-commerce especializado en equipamiento para bomberos desarrollado con React, F
 - **Gestión de estado:** React Context API
 
 ## 📁 Estructura del Proyecto
+
+src/
+├── components/ # Componentes reutilizables
+│ ├── Cart.jsx # Vista del carrito
+│ ├── CartItem.jsx # Item individual del carrito
+│ ├── CartWidget.jsx # Widget del carrito en navbar
+│ ├── ItemCount.jsx # Selector de cantidad
+│ ├── ItemDetail.jsx # Detalle de producto
+│ ├── ItemList.jsx # Lista de productos
+│ └── NavBar.jsx # Barra de navegación
+├── context/ # Context API
+│ └── CartContext.jsx # Estado global del carrito
+├── services/ # Servicios y API
+│ └── productosService.js # Conexión con Firebase
+├── pages/ # Vistas principales
+│ ├── Home.jsx # Página de inicio
+│ ├── Category.jsx # Página por categoría
+│ └── Products.jsx # Todos los productos
+└── App.jsx # Configuración de rutas
+
