@@ -1,11 +1,9 @@
-// src/components/CartItem.jsx - VERSIÓN SEGURA
 import React from 'react';
 import { useCart } from '../context/useCart';
 
 const CartItem = ({ item }) => {
   const { eliminarDelCarrito } = useCart();
   
-  // Validar que el item tenga los datos necesarios
   if (!item) {
     return (
       <div className="cart-item alert alert-warning">
@@ -23,7 +21,6 @@ const CartItem = ({ item }) => {
   return (
     <div className="cart-item border-bottom py-3">
       <div className="row align-items-center">
-        {/* Imagen */}
         <div className="col-md-2">
           <img 
             src={imagen || 'https://via.placeholder.com/100x100?text=Producto'} 
@@ -36,7 +33,7 @@ const CartItem = ({ item }) => {
         {/* Nombre */}
         <div className="col-md-4">
           <h5 className="mb-1">{nombreProducto}</h5>
-          <p className="text-muted mb-0">ID: {id || 'N/A'}</p>
+         
         </div>
         
         {/* Precio unitario */}

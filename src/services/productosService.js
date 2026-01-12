@@ -1,6 +1,7 @@
-// src/services/productosService.js - COPIA Y PEGA TODO
-// 1. ARRAY COMPLETO DE TUS PRODUCTOS
-const productos = [
+import { db } from "./firebase/config";
+import { collection, getDocs, getDoc, doc, query, where } from 'firebase/firestore';
+
+const productosLocal = [
   { 
     id: 1, 
     titulo: "Casco Bullard LTX", 
@@ -129,36 +130,183 @@ const productos = [
   }
 ];
 
-// 2. FUNCIONES DEL SERVICIO
-export const obtenerProductos = () => {
-  console.log('SERVICE - Obteniendo TODOS los productos');
+const buscarProductoPorId = (id) => {
+  console.log('SERVICE - Búsqueda mejorada para ID:', id, 'Tipo:', typeof id);
+  
+  if (!id || id === 'undefined' || id === 'null') {
+    console.log('❌ ID inválido');
+    return null;
+  }
+  
+  const productoString = productosLocal.find(p => p.id.toString() === id);
+  if (productoString) {
+    console.log(' Encontrado como string exacto');
+    return productoString;
+  }
+  
+  const idNumber = parseInt(id);
+  if (!isNaN(idNumber)) {
+    const productoNumber = productosLocal.find(p => p.id === idNumber);
+    if (productoNumber) {
+      console.log(' Encontrado como número');
+      return productoNumber;
+    }
+  }
+  
+  const productoPartial = productosLocal.find(p => 
+    id.includes(p.id.toString()) || 
+    p.id.toString().includes(id)
+  );
+  
+  if (productoPartial) {
+    console.log(' Encontrado parcialmente');
+    return productoPartial;
+  }
+  
+  if (id.length > 5) {
+    const numerosEnId = id.match(/\d+/g);
+    if (numerosEnId) {
+      for (let num of numerosEnId) {
+        const numInt = parseInt(num);
+        const productoPorNumero = productosLocal.find(p => p.id === numInt);
+        if (productoPorNumero) {
+          console.log(' Encontrado por número dentro del ID Firebase');
+          return productoPorNumero;
+        }
+      }
+    }
+  }
+  
+  console.log(' No encontrado en búsqueda local');
+  return null;
+};
+
+export const obtenerProductos = async () => {
+  console.log('SERVICE - Intentando obtener productos desde Firebase...');
+  
+  try {
+    const productosRef = collection(db, 'products');
+    const snapshot = await getDocs(productosRef);
+    
+    if (!snapshot.empty) {
+      const productosFirebase = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      console.log('SERVICE - Productos obtenidos desde Firebase:', productosFirebase.length);
+      return productosFirebase;
+    }
+    
+    throw new Error('No hay productos en Firebase');
+    
+  } catch (error) {
+    console.log(' SERVICE - Usando productos locales (fallback):', error.message);
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        console.log('SERVICE - Productos locales:', productosLocal.length);
+        resolve(productosLocal);
+      }, 500);
+    });
+  }
+};
+
+export const obtenerProductoPorId = async (id) => {
+  console.log('SERVICE - Buscando producto ID:', id, 'en Firebase...');
+  
+  try {
+    const productoRef = doc(db, 'products', id);
+    const snapshot = await getDoc(productoRef);
+    
+    if (snapshot.exists()) {
+      const productoFirebase = {
+        id: snapshot.id,
+        ...snapshot.data()
+      };
+      console.log('SERVICE - Producto encontrado en Firebase:', productoFirebase.titulo);
+      return productoFirebase;
+    }
+    
+    throw new Error('Producto no encontrado en Firebase');
+    
+  } catch (error) {
+    console.log(' SERVICE - Buscando en productos locales (fallback)...');
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const producto = buscarProductoPorId(id);
+        console.log('SERVICE - Resultado búsqueda local:', producto ? 'ENCONTRADO' : 'NO ENCONTRADO');
+        resolve(producto || null);
+      }, 500);
+    });
+  }
+};
+
+export const obtenerProductosPorCategoria = async (categoriaId) => {
+  console.log('SERVICE - Filtrando por categoría:', categoriaId, 'en Firebase...');
+  
+  try {
+    const productosRef = collection(db, 'products');
+    const q = query(productosRef, where('categoria', '==', categoriaId));
+    const snapshot = await getDocs(q);
+    
+    if (!snapshot.empty) {
+      const productosFirebase = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      console.log(' SERVICE - Productos encontrados en Firebase:', productosFirebase.length);
+      return productosFirebase;
+    }
+    
+    throw new Error('No hay productos en esta categoría en Firebase');
+    
+  } catch (error) {
+    console.log(' SERVICE - Filtrando en productos locales (fallback):', error.message);
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const filtrados = productosLocal.filter(p => p.categoria === categoriaId);
+        console.log('SERVICE - Productos encontrados:', filtrados.length);
+        resolve(filtrados);
+      }, 500);
+    });
+  }
+};
+
+export const actualizarStock = (productoId, cantidadVendida) => {
+  console.log('SERVICE - Actualizando stock LOCAL para ID:', productoId, 'Cantidad:', cantidadVendida);
+  
   return new Promise((resolve) => {
     setTimeout(() => {
-      console.log('SERVICE - Productos totales:', productos.length);
-      resolve(productos);
-    }, 500);
+      const producto = buscarProductoPorId(productoId);
+      
+      if (producto) {
+        producto.stock = Math.max(0, producto.stock - cantidadVendida);
+        console.log('SERVICE - Nuevo stock LOCAL:', producto.stock);
+        resolve({ success: true, nuevoStock: producto.stock });
+      } else {
+        resolve({ success: false, message: 'Producto no encontrado' });
+      }
+    }, 300);
   });
 };
 
-export const obtenerProductoPorId = (id) => {
-  console.log('SERVICE - Buscando producto ID:', id);
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const producto = productos.find(p => p.id === parseInt(id));
-      console.log('SERVICE - Producto encontrado:', producto);
-      resolve(producto || null);
-    }, 500);
-  });
+export const verificarStockDisponible = (productoId, cantidadRequerida) => {
+  const producto = buscarProductoPorId(productoId);
+  
+  if (!producto) {
+    return { disponible: false, message: 'Producto no encontrado' };
+  }
+  
+  if (producto.stock >= cantidadRequerida) {
+    return { disponible: true, stockActual: producto.stock };
+  } else {
+    return { 
+      disponible: false, 
+      stockActual: producto.stock,
+      message: `Solo hay ${producto.stock} unidades disponibles` 
+    };
+  }
 };
 
-export const obtenerProductosPorCategoria = (categoriaId) => {
-  console.log('SERVICE - Filtrando por categoría:', categoriaId);
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const filtrados = productos.filter(p => p.categoria === categoriaId);
-      console.log('SERVICE - Productos encontrados:', filtrados.length);
-      console.log('SERVICE - Categorías disponibles:', [...new Set(productos.map(p => p.categoria))]);
-      resolve(filtrados);
-    }, 500);
-  });
-};
+export { productosLocal as products };

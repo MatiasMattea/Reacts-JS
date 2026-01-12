@@ -2,18 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const ItemList = ({ productos }) => {
-  // Log de depuración condicional
   const isDevelopment = window.location.hostname === 'localhost' || 
                         window.location.hostname === '127.0.0.1';
   
   if (isDevelopment) {
-    console.log("🛒 ItemList recibió productos:", productos);
-    console.log("📊 Tipo de productos:", typeof productos);
-    console.log("📊 Es array?", Array.isArray(productos));
-    console.log("📊 Cantidad de productos:", productos?.length || 0);
+    console.log(" ItemList recibió productos:", productos);
+    console.log(" Tipo de productos:", typeof productos);
+    console.log(" Es array?", Array.isArray(productos));
+    console.log(" Cantidad de productos:", productos?.length || 0);
   }
 
-  // Validación mejorada
   if (!productos || !Array.isArray(productos) || productos.length === 0) {
     return (
       <div className="text-center py-5">
@@ -32,10 +30,9 @@ const ItemList = ({ productos }) => {
   return (
     <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
       {productos.map((producto, index) => {
-        // Validación de producto individual
-        if (!producto) return null;
+
+if (!producto) return null;
         
-        // Generar ID único para key
         const productId = producto.id || producto._id;
         const productKey = productId || `product-${index}`;
         const productTitle = producto.title || producto.nombre || producto.titulo || "Producto sin nombre";
@@ -43,7 +40,6 @@ const ItemList = ({ productos }) => {
         const productCategory = producto.category || producto.categoria || "Sin categoría";
         const productImage = producto.image || producto.imagen || producto.img || "/default-image.png";
         
-        // Truncar título si es muy largo
         const truncatedTitle = productTitle.length > 50 
           ? `${productTitle.substring(0, 50)}...` 
           : productTitle;
@@ -63,7 +59,6 @@ const ItemList = ({ productos }) => {
                     backgroundColor: '#f8f9fa'
                   }}
                   onError={(e) => {
-                    // Fallback elegante para imágenes rotas
                     e.target.style.display = 'none';
                     e.target.parentElement.innerHTML = `
                       <div class="d-flex align-items-center justify-content-center bg-light h-100">
@@ -77,7 +72,6 @@ const ItemList = ({ productos }) => {
                   loading="lazy"
                 />
                 
-                {/* Badge de categoría */}
                 {productCategory && (
                   <span className="position-absolute top-0 end-0 m-2">
                     <small className="badge bg-secondary bg-opacity-75 text-white">
@@ -92,7 +86,6 @@ const ItemList = ({ productos }) => {
                   {truncatedTitle}
                 </h5>
                 
-                {/* Descripción si existe */}
                 {producto.description && (
                   <p className="card-text text-muted small flex-grow-1">
                     {producto.description.length > 80
@@ -101,7 +94,6 @@ const ItemList = ({ productos }) => {
                   </p>
                 )}
                 
-                {/* Precio y acciones */}
                 <div className="mt-auto pt-3">
                   <div className="d-flex justify-content-between align-items-center">
                     <div>
@@ -115,7 +107,6 @@ const ItemList = ({ productos }) => {
                       )}
                     </div>
                     
-                    {/* Stock indicator */}
                     {producto.stock !== undefined && (
                       <small className={`badge ${producto.stock > 0 ? 'bg-success' : 'bg-danger'}`}>
                         {producto.stock > 0 ? `${producto.stock} disponibles` : 'Agotado'}
@@ -123,12 +114,11 @@ const ItemList = ({ productos }) => {
                     )}
                   </div>
                   
-                  {/* Botón de ver detalles */}
                   <Link 
-                    to={`/item/${productId}`}
+                    to={`/item/${productId}`} 
                     className="btn btn-outline-primary w-100 mt-3"
                   >
-                    <span>👁️</span> Ver detalles
+                    <span></span> Ver detalles
                   </Link>
                 </div>
               </div>

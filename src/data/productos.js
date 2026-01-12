@@ -127,7 +127,6 @@ export const productosData = [
   }
 ];
 
-// Funciones helper
 export const obtenerProductoPorId = (id) => {
   return productosData.find(producto => producto.id === parseInt(id));
 };

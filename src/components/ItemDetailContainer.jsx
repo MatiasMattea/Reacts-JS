@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import ItemList from "./ItemList";
+import ItemList from "./Itemlist";
+import ItemDetail from './ItemDetail';
 import { obtenerProductoPorId } from '../services/productosService';
 
 const ItemDetailContainer = () => {
-  console.log("✅ ItemDetailContainer MONTADO");
+  console.log("ItemDetailContainer MONTADO");
   
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,38 +16,49 @@ const ItemDetailContainer = () => {
   console.log("📌 ID del producto:", id);
 
   useEffect(() => {
-    console.log("🔄 useEffect ejecutado con id:", id);
+    console.log(" useEffect ejecutado con id:", id);
     
     const fetchProduct = async () => {
       setLoading(true);
       setError(false);
       
       try {
-        console.log("📡 Llamando a obtenerProductoPorId con:", id);
+        console.log(" Llamando a obtenerProductoPorId con:", id);
         const productData = await obtenerProductoPorId(id);
-        console.log("📦 Datos recibidos:", productData);
+        console.log(" Datos recibidos:", productData);
         
-        if (productData) {
+        if (productData && productData.id) {  
           setProduct(productData);
+          setError(false);  
         } else {
-          throw new Error("Producto no encontrado");
+          console.log(" ProductData es null o no tiene ID");
+          setError(true);
         }
       } catch (err) {
+        console.error(" Error al cargar producto:", err);
         setError(true);
-        console.error("Error al cargar producto:", err);
       } finally {
         setLoading(false);
       }
     };
     
-    if (id) {
+    if (id && id !== 'undefined' && id !== 'null') {
       fetchProduct();
     } else {
-      console.log("⚠️ ID es undefined, mostrando error");
+      console.log(" ID es inválido:", id);
       setError(true);
       setLoading(false);
     }
   }, [id]);
+
+  if (product && !loading && !error) {
+    console.log(" Enviando producto a ItemDetail:", product);
+    return (
+      <div className="container mt-4">
+        <ItemDetail product={product} />
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -62,27 +74,29 @@ const ItemDetailContainer = () => {
   if (error) {
     return (
       <div className="container mt-5 text-center">
-        <div className="alert alert-danger" role="alert">
-          <h4 className="alert-heading">¡Producto no encontrado!</h4>
-          <p>El producto que buscas no existe o ha sido removido.</p>
-          <button 
-            className="btn btn-primary mt-3"
-            onClick={() => navigate('/')}
-          >
-            Volver al catálogo
-          </button>
+        <div className="alert alert-warning" role="alert">
+          <h4 className="alert-heading">¡Atención!</h4>
+          <p>No se pudo cargar el producto en este momento.</p>
+          <div className="mt-3">
+            <button 
+              className="btn btn-primary me-2"
+              onClick={() => window.location.reload()}
+            >
+              Reintentar
+            </button>
+            <button 
+              className="btn btn-outline-primary"
+              onClick={() => navigate('/products')}
+            >
+              Ver todos los productos
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
-  console.log("📤 Enviando producto a ItemDetail:", product);
-
-  return (
-    <div className="container mt-4">
-      <ItemDetail product={product} />
-    </div>
-  );
+  return null;
 };
 
 export default ItemDetailContainer;

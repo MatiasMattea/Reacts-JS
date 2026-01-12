@@ -1,28 +1,29 @@
+// src/pages/Home.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
   return (
     <div className="container text-center py-5">
-      <h1 className="mb-4">Tienda de Equipos para Bomberos</h1>
+      <h1 className="mb-4">TIENDA DE QUIPOS PARA BOMBEROS</h1>
       <p className="lead mb-5">
-        Encuentra todo el equipamiento necesario para bomberos
+        Encuentra todo el equipamiento certificado necesario para bomberos
       </p>
       
       <div className="row mb-5">
         <div className="col-md-4 mb-3">
           <Link to="/category/cascos" className="btn btn-danger btn-lg w-100 py-3">
-            🪖 Cascos
+             Cascos
           </Link>
         </div>
         <div className="col-md-4 mb-3">
           <Link to="/category/ropa" className="btn btn-danger btn-lg w-100 py-3">
-            🧥 Ropa
+             Ropa
           </Link>
         </div>
         <div className="col-md-4 mb-3">
           <Link to="/category/guantes" className="btn btn-danger btn-lg w-100 py-3">
-            🧤 Guantes
+             Guantes
           </Link>
         </div>
       </div>

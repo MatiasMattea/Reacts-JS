@@ -1,88 +1,115 @@
-// src/components/ItemDetail.jsx - Adaptado para tus productos
-import React, { useState } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { useCart } from '../context/useCart';
+import ItemCount from './ItemCount';
 
-function ItemDetail({ producto }) {
+const ItemDetail = ({ product }) => {
   const { agregarAlCarrito } = useCart();
-  const [cantidad, setCantidad] = useState(1);
 
-  // Función para manejar agregar
-  const handleAgregar = () => {
-    if (!producto) return;
-    
-    // Crear objeto compatible con el carrito
+  if (!product) {
+    return (
+      <div className="container text-center py-5">
+        <div className="card shadow-sm" style={{maxWidth: '500px', margin: '0 auto'}}>
+          <div className="card-body py-5">
+            <h3 className="text-danger">Producto no encontrado</h3>
+            <p className="text-muted">No se pudo cargar el producto</p>
+            <Link to="/products" className="btn btn-primary">
+              Ver todos los productos
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const handleAddToCart = (cantidadSeleccionada) => {
     const productoParaCarrito = {
-      id: producto.id,
-      nombre: producto.titulo,  // ← Usamos "titulo" como "nombre"
-      precio: producto.precio,
-      imagen: producto.imagen,
-      descripcion: producto.descripcion,
-      stock: producto.stock
+      id: product.id,
+      nombre: product.titulo || product.nombre,
+      precio: product.precio,
+      imagen: product.imagen,
+      descripcion: product.descripcion,
+      stock: product.stock || 0
     };
     
-    agregarAlCarrito(productoParaCarrito, cantidad);
-    alert(`Agregaste ${cantidad} ${producto.titulo} al carrito`);
-  };
-
-  // Controlar cantidad máxima (no superar stock)
-  const handleCantidadChange = (nuevaCantidad) => {
-    if (nuevaCantidad < 1) return;
-    if (nuevaCantidad > producto.stock) {
-      alert(`Solo hay ${producto.stock} unidades disponibles`);
-      return;
-    }
-    setCantidad(nuevaCantidad);
-  };
+    agregarAlCarrito(productoParaCarrito, cantidadSeleccionada);
+     };
 
   return (
-    <div className="producto-detalle">
-      <img 
-        src={producto.imagen} 
-        alt={producto.titulo}
-        style={{ width: '300px', borderRadius: '10px' }}
-      />
-      <h2>{producto.titulo}</h2>
-      <p>{producto.descripcion}</p>
-      <p><strong>Precio: ${producto.precio.toLocaleString()}</strong></p>
-      <p>Stock disponible: {producto.stock}</p>
-      
-      {/* Selector de cantidad */}
-      <div style={{ margin: '20px 0' }}>
-        <button 
-          onClick={() => handleCantidadChange(cantidad - 1)}
-          style={{ padding: '5px 15px', marginRight: '10px' }}
-        >
-          -
-        </button>
-        <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
-          {cantidad}
-        </span>
-        <button 
-          onClick={() => handleCantidadChange(cantidad + 1)}
-          style={{ padding: '5px 15px', marginLeft: '10px' }}
-        >
-          +
-        </button>
+    <div className="container py-5">
+      <div className="row">
+        <div className="col-lg-6 mb-4">
+          <div className="card shadow-sm border-0">
+            <div className="card-body p-4 text-center">
+              <img 
+                src={product.imagen} 
+                alt={product.titulo || product.nombre}
+                className="img-fluid rounded"
+                style={{
+                  maxHeight: '400px',
+                  objectFit: 'contain',
+                  width: '100%'
+                }}
+                onError={(e) => {
+                  e.target.src = 'https://via.placeholder.com/500x400/FF6B6B/FFFFFF?text=Imagen+no+disponible';
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        
+        <div className="col-lg-6">
+          <div className="card shadow-sm border-0 h-100">
+            <div className="card-body p-4 d-flex flex-column">
+              <h1 className="mb-3">{product.titulo || product.nombre}</h1>
+              
+              <div className="mb-4">
+                <span className="badge bg-danger fs-6 mb-3">
+                  {product.categoria ? 
+                    product.categoria.charAt(0).toUpperCase() + product.categoria.slice(1) 
+                    : 'Sin categoría'
+                  }
+                </span>
+                
+                <p className="text-muted mb-4">{product.descripcion || 'Sin descripción disponible'}</p>
+                
+                <div className="d-flex align-items-center mb-4">
+                  <span className="fs-5 me-2">Stock:</span>
+                  <span className={`badge ${product.stock > 0 ? 'bg-success' : 'bg-danger'} fs-6`}>
+                    {product.stock > 0 ? `${product.stock} unidades` : 'Sin stock'}
+                  </span>
+                </div>
+                
+                <h2 className="text-danger mb-4">
+                  ${product.precio ? product.precio.toLocaleString() : '0'}
+                </h2>
+              </div>
+              
+              <div className="mb-4">
+                <ItemCount 
+                  stock={product.stock || 0}
+                  initial={1}
+                  onAdd={handleAddToCart}
+                  showAddButton={true}
+                />
+              </div>
+              
+              <div className="mt-auto">
+                <div className="d-flex gap-2">
+                  <Link to="/products" className="btn btn-outline-primary flex-grow-1">
+                    ← Seguir comprando
+                  </Link>
+                  <Link to="/cart" className="btn btn-outline-danger flex-grow-1">
+                    Ver carrito →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      {/* Botón agregar */}
-      <button 
-        onClick={handleAgregar}
-        disabled={producto.stock === 0}
-        style={{
-          backgroundColor: producto.stock > 0 ? '#d32f2f' : '#ccc',
-          color: 'white',
-          padding: '12px 30px',
-          border: 'none',
-          borderRadius: '5px',
-          fontSize: '1rem',
-          cursor: producto.stock > 0 ? 'pointer' : 'not-allowed'
-        }}
-      >
-        {producto.stock > 0 ? 'AGREGAR AL CARRITO' : 'SIN STOCK'}
-      </button>
     </div>
   );
-}
+};
 
 export default ItemDetail;
