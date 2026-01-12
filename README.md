@@ -1,41 +1,29 @@
-<<<<<<< HEAD
-# React + Vite
+# 🚒 M2M Tienda para Bomberos - E-commerce React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
-Currently, two official plugins are available:
+**Proyecto Final del curso de React JS - CoderHouse**
+E-commerce especializado en equipamiento para bomberos desarrollado con React, Firebase, Vercel y Bootstrap.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Características Principales
 
-## React Compiler
+- ✅ **Catálogo completo** de productos por categorías (Cascos, Ropa, botas, Guantes)
+- ✅ **Carrito de compras** con persistencia en localStorage
+- ✅ **Checkout** con generación de órdenes en Firebase
+- ✅ **Sistema de stock** en tiempo real
+- ✅ **Diseño 100% responsive** (mobile, tablet, desktop)
+- ✅ **Manejo de errores** y estados de carga
+- ✅ **Navegación SPA** con React Router DOM
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tecnologías Utilizadas
 
-## Expanding the ESLint configuration
+- **Frontend:** React 18, React Router DOM 6
+- **Backend:** Firebase Firestore (Base de datos en tiempo real)
+- **Estilos:** Bootstrap 5 + CSS personalizado
+- **Deploy:** Vercel
+- **Gestión de estado:** React Context API
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# Reacts-JS
->>>>>>> 7362ad4898ff17709c0ea6e16603ea8b76829367
-
-# Mi Proyecto Final - Tienda de Bomberos
-
-Esta es mi tienda online de equipos para bomberos.
-
-## Cómo funciona
-- Veo productos
-- Los agrego al carrito
-- Hago el checkout
-- Se guarda en Firebase
-
-## Tecnologías
-- React JS
-- Firebase
-- Bootstrap
-
-## Para probarlo
-npm install
-npm start
-
-Hecho por Matias Mattea
+## 📁 Estructura del Proyecto
