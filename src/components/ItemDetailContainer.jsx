@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import ItemList from "./Itemlist";
+import ItemList from "./ItemList";
 import ItemDetail from './ItemDetail';
 import { obtenerProductoPorId } from '../services/productosService';
 

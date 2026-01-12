@@ -1,4 +1,3 @@
-// En tu proyecto local, crea este archivo
 const productos = [
   { 
     id: "1", 
@@ -42,7 +41,7 @@ console.log("====================================");
 console.log("PRODUCTOS PARA SUBIR A FIRESTORE");
 console.log("====================================");
 console.log("Total productos:", productos.length);
-console.log("\n📋 INSTRUCCIONES:");
+console.log("\n INSTRUCCIONES:");
 console.log("1. Ve a: https://console.firebase.google.com");
 console.log("2. Proyecto: tienda-bomberos");
 console.log("3. Firestore Database → 'Iniciar colección'");
@@ -51,5 +50,5 @@ console.log("5. Para cada producto:");
 console.log("   - Copia el objeto JSON");
 console.log("   - Pega en Firestore");
 console.log("   - Guarda");
-console.log("\n📦 PRODUCTOS:");
+console.log("\n PRODUCTOS:");
 console.log(JSON.stringify(productos, null, 2));
